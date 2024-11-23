@@ -1,0 +1,75 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Gestão de Profissionais";
+}
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <button type="button" class="btn btn-light">Filtrar por:Todos</button>
+            </div>
+            <div class="col-md-4 ml-auto">
+                <button type="button" class="btn btn-info">Adicionar+</button>
+            </div>
+        </div>
+        <div class="text-center">
+            <table class="table table-bordered table-hover" id="report">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Nome</th>
+                        <th scope="col">Especialidade</th>
+                        <th scope="col">Tipo do Documento</th>
+                        <th scope="col">Número do documento</th>
+                        <th scope="col">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>João da Silva Almeida</td>
+                        <td>Clínica Geral</td>
+                        <td>CRM</td>
+                        <td>1234567</td>
+                        <td>...</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>Carlos Ferreira Alencar Junior</td>
+                        <td>Psicologia</td>
+                        <td>CRP</td>
+                        <td>06123456</td>
+                        <td>...</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td>José Machado Pereira Santos</td>
+                        <td>Nutrição</td>
+                        <td>CRN</td>
+                        <td>312345</td>
+                        <td>...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <nav aria-label="Navegação de página exemplo">
+            <ul class="pagination justify-content-center">
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Anterior">
+                        &laquo;
+                    </a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Próximo">
+                        &raquo;
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</body>
