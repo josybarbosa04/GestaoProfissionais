@@ -16,3 +16,50 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.header {
+    background-color: #015958;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+button.btn {
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+button.btn-success {
+    background-color: #015958; 
+    border-color: #015958;
+}
+
+button.btn-outline-secondary {
+    color: #015958;
+    border-color: #015958;
+}
+
+button.btn-outline-secondary:hover {
+    background-color: #015958;
+    color: white;
+}
+
+.table {
+    border-collapse: collapse;
+}
+
+.table-bordered th,
+.table-bordered td {
+    border: 1px solid #e0e0e0;
+}
+
+.bi {
+    cursor: pointer;
+}
+
+.pagination .page-link {
+    color: #015958;
+}
+
