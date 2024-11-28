@@ -19,10 +19,10 @@ Certifique-se de que sua máquina possui os seguintes requisitos antes de config
 
 ## **Configuração do Projeto**
 
--Clone o repositório;
--Abra o Projeto no Visual Studio;
--Configure o Banco de Dados;
--Execute o Projeto no Visual Studio.
+- Clone o repositório;
+- Abra o Projeto no Visual Studio;
+- Configure o Banco de Dados;
+- Execute o Projeto no Visual Studio.
 
 ---
 
