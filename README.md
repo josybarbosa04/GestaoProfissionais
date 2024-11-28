@@ -1,15 +1,15 @@
-**Painel de Gestão de Profissionais**
+## **Painel de Gestão de Profissionais**
 
 Um painel de gestão de profissionais desenvolvido em .NET com SQLite, que permite visualizar, cadastrar, editar, excluir e filtrar profissionais por especialidade.
 
 ---
 
-**Pré-requisitos**
+## **Pré-requisitos**
 
 Certifique-se de que sua máquina possui os seguintes requisitos antes de configurar o projeto:
 
-1. [.NET SDK 6.0 ou superior](https://dotnet.microsoft.com/download)
-2. [Visual Studio 2022 ou superior](https://visualstudio.microsoft.com/) com os seguintes componentes instalados:
+1. [.NET SDK 6.0](https://dotnet.microsoft.com/download)
+2. [Visual Studio 2022](https://visualstudio.microsoft.com/) com os seguintes componentes instalados:
    - Desenvolvimento de ASP.NET e Web.
    - Ferramentas para .NET 6.0.
 3. SQLite para .NET.
@@ -17,33 +17,34 @@ Certifique-se de que sua máquina possui os seguintes requisitos antes de config
 
 ---
 
-**Configuração do Projeto**
+## **Configuração do Projeto**
 
 -Clone o repositório;
 -Abra o Projeto no Visual Studio;
 -Configure o Banco de Dados;
 -Execute o Projeto no Visual Studio.
+
 ---
 
-**Funcionalidades**
+## **Funcionalidades**
 
-**Cadastro de Profissionais**
+### **Cadastro de Profissionais**
 
 - Utilize o botão **Adicionar** para abrir o modal de cadastro.
 - Preencha os campos necessários e clique em **Salvar**.
 
-**Lista de Profissionais**
+### **Lista de Profissionais**
 
 - Visualize os profissionais cadastrados em uma tabela.
 - Use as opções de ação para editar ou excluir profissionais.
 
-**Filtro de Especialidade**
+### **Filtro de Especialidade**
 
 - Utilize o botão **Filtrar** para filtrar profissionais por especialidade.
 
 ---
 
-**Dependências do Projeto**
+## **Dependências do Projeto**
 
 Este projeto utiliza:
 
@@ -55,7 +56,7 @@ Este projeto utiliza:
 
 ---
 
-**Dúvidas**
+## **Dúvidas**
 
 Se encontrar problemas na configuração ou execução do projeto, entre em contato:
 
