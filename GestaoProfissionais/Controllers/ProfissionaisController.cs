@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GestaoProfissionais.Controllers
 {
+    [Route("Professional")]
     public class ProfissionaisController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -14,28 +15,45 @@ namespace GestaoProfissionais.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(string filtroEspecialidade = null)
+        public async Task<IActionResult> Index()
         {
             var profissionais = _context.Profissionais.AsQueryable();
-
-            if (!string.IsNullOrEmpty(filtroEspecialidade))
-                profissionais = profissionais.Where(p => p.Especialidade == filtroEspecialidade);
 
             ViewBag.Especialidades = await _context.Especialidades.ToListAsync();
             return View(await profissionais.ToListAsync());
         }
+        //Paginação
+        public async Task<IActionResult> Paginacao(int pageNumber = 1, int pageSize = 10)
+        {
+            var totalProfissionais = await _context.Profissionais.CountAsync();  // Total de registros
 
-        [HttpPost]
-        public async Task<IActionResult> Create(Profissional profissional)
+            // Calcular o número total de páginas
+            var totalPages = (int)Math.Ceiling(totalProfissionais / (double)pageSize);
+
+            // Obter os dados da página atual
+            var profissionais = await _context.Profissionais
+                .Skip((pageNumber - 1) * pageSize) // Pula os registros das páginas anteriores
+                .Take(pageSize) // Limita os registros a serem exibidos
+                .ToListAsync();
+
+            // Definir o ViewData com a página atual, total de páginas e tamanho da página
+            ViewData["CurrentPage"] = pageNumber;
+            ViewData["TotalPages"] = totalPages;
+            ViewData["PageSize"] = pageSize;
+
+            return View(profissionais);
+        }
+
+        [HttpPost("Create")]
+        public IActionResult Create([FromBody] Profissional profissional)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(profissional);
-                await _context.SaveChangesAsync();
-                TempData["Mensagem"] = "Profissional cadastrado com sucesso!";
-                return RedirectToAction(nameof(Index));
+                _context.SaveChanges();
+                return Ok();
             }
-            return View(profissional);
+            return BadRequest();
         }
 
         public async Task<IActionResult> Edit(int id)
@@ -70,6 +88,21 @@ namespace GestaoProfissionais.Controllers
                 TempData["Mensagem"] = "Profissional excluído com sucesso!";
             }
             return RedirectToAction(nameof(Index));
+        }
+        [HttpGet("GetEspecialidades")]
+        public IActionResult GetEspecialidades()
+        {
+            try
+            {
+                var especialidades = _context.Especialidades
+                                .Select(s => new { s.Id, s.Nome })
+                                .ToList();
+                            return Json(especialidades);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = ex.Message });
+            }
         }
     }
 }
