@@ -12,14 +12,14 @@
         </div>
         @* Botões filtro e adicionar *@
         <div class="d-flex justify-content-between align-items-center mt-4">
-            <button class="btn btn-outline-secondary">Filtrar por: Todos</button>
-            @* <select id="filtroEspecialidade" class="form-select mt-3" onchange="filtrar()">
-                <option value="">Filtrar por:</option>
+            @* <button class="btn btn-outline-secondary">Filtrar por: Todos</button> *@
+            <select id="filtroEspecialidade" class="form-select mt-3" onchange="filtrar()">
+                <option value="">Filtrar por: Todos</option>
                 @foreach (var especialidade in ViewBag.Especialidades)
                 {
-                    <option value="@especialidade.Nome">@especialidade.Nome</option>
+                    <option value="@especialidade.Nome">Filtrar por: @especialidade.Nome</option>
                 }
-            </select> *@
+            </select>
             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAdd" href="@Url.Action("Create", "Profissionais")">
                 Adicionar +</button>
         </div>
@@ -87,9 +87,13 @@
                                 <td>@profissional.TipoDocumento</td>
                                 <td>@profissional.NumeroDocumento</td>
                                 <td>
-                                    <i class="bi bi-three-dots" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"></i>
-                                    <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalEdit-@profissional.Id">Editar</button>
-                                    <a class="btn btn-danger" href="@Url.Action("Delete", new { id = profissional.Id })">Excluir</a>
+                                    @* <i class="bi bi-three-dots" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"></i> *@
+                                    <button class="btn btn-warning btn-edit" data-bs-toggle="modal" data-bs-target="#modalEditar-@profissional.Id"
+                                            data-id="@profissional.Id" data-nome="@profissional.Nome" data-especialidade="@profissional.Especialidade"
+                                            data-tipoDocumento="@profissional.TipoDocumento" data-numeroDocumento="@profissional.NumeroDocumento">
+                                        Editar
+                                    </button>
+                                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalExcluir" data-id="@profissional.Id">Excluir</button>
                                 </td>
                             </tr>
                         }
@@ -104,23 +108,78 @@
             </table>
         </div>
 
+        @* Modal Editar *@
+        @foreach (var profissional in Model)
+        {
+
+            <div class="modal fade" id="modalEditar-@profissional.Id" tabindex="-1" aria-labelledby="modalEditarLabel-@profissional.Id" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalEditarLabel-@profissional.Id">Editar Profissional</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="formEditarProfissional" method="post" action="@Url.Action("Edit", "Profissional")">
+                                <input type="hidden" name="Id" value="@profissional.Id" />
+                                <div class="mb-3">
+                                    <label for="nome" class="form-label">Nome do Profissional</label>
+                                    <input type="text" class="form-control" id="nome" name="nome" value="@profissional.Nome" />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="especialidade" class="form-label">Especialidade</label>
+                                    <select class="form-select" id="especialidade" name="especialidade" required>
+                                        <option value="">Selecione uma especialidade</option>
+                                        @foreach (var especialidade in ViewBag.Especialidades as List<GestaoProfissionais.Models.Especialidade>)
+                                        {
+                                            <option value="@especialidade.Nome" selected="@((especialidade.Nome == profissional.Especialidade) ? "selected" : "")">
+                                                @especialidade.Nome
+                                            </option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="tipoDocumento" class="form-label">Tipo do Documento</label>
+                                    <input type="text" class="form-control" id="tipoDocumento" name="tipoDocumento" value="@profissional.TipoDocumento" readonly/>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="numeroDocumento" class="form-label">Número do Documento</label>
+                                    <input type="text" class="form-control" id="numeroDocumento" name="numeroDocumento" value="@profissional.NumeroDocumento" />
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="hidden" id="profissionalId" name="Id">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-success">Salvar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @* Modal confirma exclusão *@
+        <div class="modal fade" id="modalExcluir" tabindex="-1" aria-labelledby="modalExcluirLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalExcluirLabel">Excluir Profissional</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Feclar"></button>
+                    </div>
+                    <div class="modal-body">
+                        Tem certeza que deseja excluir este profissional? Essa ação não poderá ser desfeita!
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <a id="btnDelete" href="#" class="btn btn-danger">Sim, excluir</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         @* Paginação *@
-        @* <nav>
-            <ul class="pagination justify-content-center">
-                <li class="page-item">
-                    <a class="page-link" href="#">&lt;</a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#">&gt;</a>
-                </li>
-            </ul>
-        </nav> *@
         <nav>
             <ul class="pagination justify-content-center">
-                @* Botões para navegação para a página anterior *@
                 @if (ViewData["CurrentPage"] != null && (int)ViewData["CurrentPage"] > 1)
                 {
                     <li class="page-item">
@@ -134,15 +193,13 @@
                     </li>
                 }
 
-                @* Exibir os números das páginas *@
-                @for (int i = 1; i <= (int)(ViewData["TotalPages"] ?? 1); i++)  @* Default to 1 if null *@
+                @for (int i = 1; i <= (int)(ViewData["TotalPages"] ?? 1); i++) 
                 {
                     <li class="page-item @(i == (int)(ViewData["CurrentPage"] ?? 1) ? "active" : "")">
                         <a class="page-link" href="@Url.Action("Paginacao", new { pageNumber = i, pageSize = (int)(ViewData["PageSize"] ?? 10) })">@i</a>
                     </li>
                 }
 
-                @* Botão para a próxima página *@
                 @if (ViewData["CurrentPage"] != null && (int)ViewData["CurrentPage"] < (int)(ViewData["TotalPages"] ?? 1))
                 {
                     <li class="page-item">
@@ -158,11 +215,4 @@
             </ul>
         </nav>
     </div>
-
-    <script>
-        function filtrar() {
-            var especialidade = document.getElementById("filtroEspecialidade").value;
-            window.location.href = "/Profissionais?filtroEspecialidade=" + especialidade;
-        }
-    </script>
 </body>

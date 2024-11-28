@@ -36,14 +36,23 @@ button.btn-success {
     border-color: #015958;
 }
 
-button.btn-outline-secondary {
+select#filtroEspecialidade {
     color: #015958;
-    border-color: #015958;
+    border: 1px solid #015958;
+    background-color: transparent;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+    display: inline-block;
+    width: auto;
 }
 
-button.btn-outline-secondary:hover {
-    background-color: #015958;
-    color: white;
+select#filtroEspecialidade:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(1, 89, 88, 0.25);
+    border-color: #015958;
 }
 
 .table {
