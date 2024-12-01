@@ -95,6 +95,7 @@ function filtrar() {
         }
     });
 }
+
 $(document).ready(function () {
     $(".btn-edit").on("click", function () {
         var button = $(event.relatedTarget);

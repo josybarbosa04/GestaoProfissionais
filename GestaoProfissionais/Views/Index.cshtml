@@ -127,7 +127,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="especialidade" class="form-label">Especialidade</label>
-                                    <select class="form-select" id="especialidade" name="especialidade" required>
+                                    @* <select class="form-select" id="especialidade" name="especialidade" required>
                                         <option value="">Selecione uma especialidade</option>
                                         @foreach (var especialidade in ViewBag.Especialidades as List<GestaoProfissionais.Models.Especialidade>)
                                         {
@@ -135,7 +135,8 @@
                                                 @especialidade.Nome
                                             </option>
                                         }
-                                    </select>
+                                    </select> *@
+                                    <input type="text" class="form-control" id="especialidade" name="especialidade" value="@profissional.Especialidade" readonly />
                                 </div>
                                 <div class="mb-3">
                                     <label for="tipoDocumento" class="form-label">Tipo do Documento</label>
