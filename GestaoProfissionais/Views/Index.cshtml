@@ -12,7 +12,6 @@
         </div>
         @* Botões filtro e adicionar *@
         <div class="d-flex justify-content-between align-items-center mt-4">
-            @* <button class="btn btn-outline-secondary">Filtrar por: Todos</button> *@
             <select id="filtroEspecialidade" class="form-select mt-3" onchange="filtrar()">
                 <option value="">Filtrar por: Todos</option>
                 @foreach (var especialidade in ViewBag.Especialidades)
@@ -120,7 +119,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                         </div>
                         <div class="modal-body">
-                            <form id="formEditarProfissional" method="post" action="@Url.Action("Edit", "Profissional")">
+                            <form id="formEditarProfissional" method="post" action="@Url.Action("Edit", "Home")">
                                 <input type="hidden" name="Id" value="@profissional.Id" />
                                 <div class="mb-3">
                                     <label for="nome" class="form-label">Nome do Profissional</label>
@@ -146,12 +145,11 @@
                                     <label for="numeroDocumento" class="form-label">Número do Documento</label>
                                     <input type="text" class="form-control" id="numeroDocumento" name="numeroDocumento" value="@profissional.NumeroDocumento" />
                                 </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="submit" class="btn btn-success">Salvar</button>
+                                </div>
                             </form>
-                        </div>
-                        <div class="modal-footer">
-                            <input type="hidden" id="profissionalId" name="Id">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="button" class="btn btn-success">Salvar</button>
                         </div>
                     </div>
                 </div>
@@ -164,14 +162,21 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="modalExcluirLabel">Excluir Profissional</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Feclar"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                     </div>
                     <div class="modal-body">
                         Tem certeza que deseja excluir este profissional? Essa ação não poderá ser desfeita!
+                        <br />
+                        <div style="display: flex; justify-content: center; align-items: center; margin-top: 10px;">
+                            <img id="loadingSpinner" src="https://i.gifer.com/VAyR.gif" alt="Carregando..." style="display: none; width: 30px; height: 30px;" />
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <a id="btnDelete" href="#" class="btn btn-danger">Sim, excluir</a>
+                        <form id="deleteForm" method="post" action="">
+                            <input type="hidden" name="id" id="deleteId">
+                            <button type="submit" class="btn btn-danger" id="deleteButton">Sim, excluir</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -183,7 +188,7 @@
                 @if (ViewData["CurrentPage"] != null && (int)ViewData["CurrentPage"] > 1)
                 {
                     <li class="page-item">
-                        <a class="page-link" href="@Url.Action("Paginacao", new { pageNumber = (int)ViewData["CurrentPage"] - 1, pageSize = (int)ViewData["PageSize"] })">&lt;</a>
+                        <a class="page-link" href="@Url.Action("Index", new { pageNumber = (int)ViewData["CurrentPage"] - 1, pageSize = (int)ViewData["PageSize"] })">&lt;</a>
                     </li>
                 }
                 else
@@ -196,14 +201,14 @@
                 @for (int i = 1; i <= (int)(ViewData["TotalPages"] ?? 1); i++) 
                 {
                     <li class="page-item @(i == (int)(ViewData["CurrentPage"] ?? 1) ? "active" : "")">
-                        <a class="page-link" href="@Url.Action("Paginacao", new { pageNumber = i, pageSize = (int)(ViewData["PageSize"] ?? 10) })">@i</a>
+                        <a class="page-link" href="@Url.Action("Index", new { pageNumber = i, pageSize = (int)(ViewData["PageSize"] ?? 10) })">@i</a>
                     </li>
                 }
 
                 @if (ViewData["CurrentPage"] != null && (int)ViewData["CurrentPage"] < (int)(ViewData["TotalPages"] ?? 1))
                 {
                     <li class="page-item">
-                        <a class="page-link" href="@Url.Action("Paginacao", new { pageNumber = (int)ViewData["CurrentPage"] + 1, pageSize = (int)(ViewData["PageSize"] ?? 10) })">&gt;</a>
+                        <a class="page-link" href="@Url.Action("Index", new { pageNumber = (int)ViewData["CurrentPage"] + 1, pageSize = (int)(ViewData["PageSize"] ?? 10) })">&gt;</a>
                     </li>
                 }
                 else

@@ -15,25 +15,6 @@ namespace GestaoProfissionais.Controllers
             _context = context;
         }
 
-        //Paginação
-        public async Task<IActionResult> Paginacao(int pageNumber = 1, int pageSize = 10)
-        {
-            var totalProfissionais = await _context.Profissionais.CountAsync();
-
-            var totalPages = (int)Math.Ceiling(totalProfissionais / (double)pageSize);
-
-            var profissionais = await _context.Profissionais
-                .Skip((pageNumber - 1) * pageSize) 
-                .Take(pageSize)
-                .ToListAsync();
-
-            ViewData["CurrentPage"] = pageNumber;
-            ViewData["TotalPages"] = totalPages;
-            ViewData["PageSize"] = pageSize;
-
-            return View(profissionais);
-        }
-
         [HttpPost("Create")]
         public IActionResult Create([FromBody] Profissional profissional)
         {
@@ -55,6 +36,27 @@ namespace GestaoProfissionais.Controllers
             return View(profissional);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Edit(int Id, string Nome, string Especialidade, string TipoDocumento, string NumeroDocumento)
+        {
+            if (ModelState.IsValid)
+            {
+                var profissionalExistente = await _context.Profissionais.FindAsync(Id);
+                if (profissionalExistente != null)
+                {
+                    profissionalExistente.Nome = Nome;
+                    profissionalExistente.Especialidade = Especialidade;
+                    profissionalExistente.TipoDocumento = TipoDocumento;
+                    profissionalExistente.NumeroDocumento = NumeroDocumento;
+
+                    await _context.SaveChangesAsync();
+                    TempData["Mensagem"] = "Profissional atualizado com sucesso!";
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
 
         [HttpGet("GetEspecialidades")]
         public IActionResult GetEspecialidades()

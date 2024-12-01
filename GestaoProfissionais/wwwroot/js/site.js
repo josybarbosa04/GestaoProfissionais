@@ -98,21 +98,37 @@ function filtrar() {
 $(document).ready(function () {
     $(".btn-edit").on("click", function () {
         var button = $(event.relatedTarget);
-        var especialidade = button.data('especialidade');
-
-        console.log('Especialidade:', especialidade);
-
+        
         var modalId = $(this).data("target");
         $(modalId).modal("show");
     });
 });
 
-const btnDelete = document.getElementById('btnDelete');
-const deleteButtons = document.querySelectorAll('.btn-danger[data-bs-toggle="modal"]');
+document.addEventListener('DOMContentLoaded', function () {
+    const modalExcluir = document.getElementById('modalExcluir');
+    const deleteForm = document.getElementById('deleteForm');
+    const deleteIdInput = document.getElementById('deleteId');
+    const deleteButton = document.getElementById('deleteButton');
+    const loadingSpinner = document.getElementById('loadingSpinner');
 
-deleteButtons.forEach(button => {
-    button.addEventListener('click', function () {
-        const profissionalId = this.getAttribute('data-id');
-        btnDelete.href = '@Url.Action("Delete", "Profissional")/' + profissionalId;
+    modalExcluir.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;
+        const profissionalId = button.getAttribute('data-id');
+        deleteIdInput.value = profissionalId;  
+        deleteForm.action = `/Home/Delete`;  
+
+        loadingSpinner.style.display = 'none';
+        deleteButton.disabled = false; 
+    });
+
+    deleteForm.addEventListener('submit', function (e) {
+        e.preventDefault(); 
+
+        loadingSpinner.style.display = 'block';
+        deleteButton.disabled = true;  
+
+        setTimeout(function () {
+            deleteForm.submit();  
+        }, 1500);  
     });
 });
