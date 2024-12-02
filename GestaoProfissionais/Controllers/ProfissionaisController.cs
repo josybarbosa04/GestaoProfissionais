@@ -27,37 +27,6 @@ namespace GestaoProfissionais.Controllers
             return BadRequest();
         }
 
-        public async Task<IActionResult> Edit(int id)
-        {
-            var profissional = await _context.Profissionais.FindAsync(id);
-            if (profissional == null) return NotFound();
-
-            ViewBag.Especialidades = await _context.Especialidades.ToListAsync();
-            return View(profissional);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Edit(int Id, string Nome, string Especialidade, string TipoDocumento, string NumeroDocumento)
-        {
-            if (ModelState.IsValid)
-            {
-                var profissionalExistente = await _context.Profissionais.FindAsync(Id);
-                if (profissionalExistente != null)
-                {
-                    profissionalExistente.Nome = Nome;
-                    profissionalExistente.Especialidade = Especialidade;
-                    profissionalExistente.TipoDocumento = TipoDocumento;
-                    profissionalExistente.NumeroDocumento = NumeroDocumento;
-
-                    await _context.SaveChangesAsync();
-                    TempData["Mensagem"] = "Profissional atualizado com sucesso!";
-                    return RedirectToAction(nameof(Index));
-                }
-            }
-
-            return RedirectToAction(nameof(Index));
-        }
-
         [HttpGet("GetEspecialidades")]
         public IActionResult GetEspecialidades()
         {

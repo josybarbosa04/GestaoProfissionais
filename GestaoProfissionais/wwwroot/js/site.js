@@ -133,3 +133,13 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 1500);  
     });
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    var alerts = document.querySelectorAll('.alert');
+    alerts.forEach(function (alert) {
+        setTimeout(function () {
+            var alertInstance = new bootstrap.Alert(alert);
+            alertInstance.close();
+        }, 5000); 
+    });
+});

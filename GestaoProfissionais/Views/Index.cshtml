@@ -183,6 +183,14 @@
             </div>
         </div>
 
+        @* Alerts *@
+        @if (!string.IsNullOrEmpty(ViewBag.MensagemTexto))
+        {
+            <div class="alert alert-@ViewBag.MensagemTipo" role="alert">
+                @ViewBag.MensagemTexto
+            </div>
+        }
+
         @* Paginação *@
         <nav>
             <ul class="pagination justify-content-center">

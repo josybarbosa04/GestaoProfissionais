@@ -11,9 +11,11 @@ public class HomeController : Controller
     {
         _context = context;
     }
-    public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 10)
+    public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 10, string mensagemTipo = null, string mensagemTexto = null)
      {
         ViewBag.Especialidades = await _context.Especialidades.ToListAsync();
+        ViewBag.MensagemTipo = mensagemTipo;
+        ViewBag.MensagemTexto = mensagemTexto;
         var totalProfissionais = await _context.Profissionais.CountAsync();
 
         var totalPages = (int)Math.Ceiling(totalProfissionais / (double)pageSize);
@@ -41,35 +43,46 @@ public class HomeController : Controller
     [HttpPost("Edit")]
     public async Task<IActionResult> Edit(int Id, string Nome, string Especialidade, string TipoDocumento, string NumeroDocumento)
     {
-        if (ModelState.IsValid)
+        var profissionalExistente = await _context.Profissionais.FindAsync(Id);
+        string mensagemTipo;
+        string mensagemTexto;
+        if (profissionalExistente != null)
         {
-            var profissionalExistente = await _context.Profissionais.FindAsync(Id);
-            if (profissionalExistente != null)
-            {
-                profissionalExistente.Nome = Nome;
-                profissionalExistente.Especialidade = Especialidade;
-                profissionalExistente.TipoDocumento = TipoDocumento;
-                profissionalExistente.NumeroDocumento = NumeroDocumento;
+            profissionalExistente.Nome = Nome;
+            profissionalExistente.Especialidade = Especialidade;
+            profissionalExistente.TipoDocumento = TipoDocumento;
+            profissionalExistente.NumeroDocumento = NumeroDocumento;
 
-                await _context.SaveChangesAsync();
-                TempData["Mensagem"] = "Profissional atualizado com sucesso!";
-                return RedirectToAction(nameof(Index));
-            }
+            await _context.SaveChangesAsync();
+            mensagemTipo = "sucess";
+            mensagemTexto = "Profissional editado com sucesso!";
+        } else
+        {
+            mensagemTipo = "danger";
+            mensagemTexto = "Erro ao editar profissional.";
         }
-
-        return RedirectToAction(nameof(Index));
+        return RedirectToAction(nameof(Index), new { mensagemTipo, mensagemTexto });
     }
 
     [HttpPost]
     public async Task<IActionResult> Delete(int id)
     {
         var profissional = await _context.Profissionais.FindAsync(id);
+        string mensagemTipo;
+        string mensagemTexto;
+
         if (profissional != null)
         {
             _context.Profissionais.Remove(profissional);
             await _context.SaveChangesAsync();
-            TempData["Mensagem"] = "Profissional excluído com sucesso!";
+            mensagemTipo = "success";
+            mensagemTexto = "Profissional excluído com sucesso!";
         }
-        return RedirectToAction(nameof(Index));
+        else
+        {
+            mensagemTipo = "danger";
+            mensagemTexto = "Erro ao excluir profissional.";
+        }
+        return RedirectToAction(nameof(Index), new { mensagemTipo, mensagemTexto });
     }
 }
